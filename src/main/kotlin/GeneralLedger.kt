@@ -12,11 +12,22 @@ class GeneralLedger(private val accounts: Map<String, Account>) {
 
     // Post a single journal entry to the ledger
     fun postJournal(journalEntry: JournalEntry) {
+        // Validate debit and credit balance
+        val totalDebit = journalEntry.lines.sumOf { it.debit }
+        val totalCredit = journalEntry.lines.sumOf { it.credit }
+        if (totalDebit != totalCredit) {
+            println("Journal on ${journalEntry.date} (${journalEntry.description}) is unbalance! Debit: ${formatAmount(totalDebit)} | Credit: ${formatAmount(totalCredit)}")
+            throw IllegalArgumentException("Journal on ${journalEntry.date} is unbalanced! Please fix it before posting.")
+        }
+
+        // If balanced, continue posting to ledger
         for (line in journalEntry.lines) {
             val list  = postings[line.accountId] ?: throw IllegalArgumentException("Account ${line.accountId} not found")
             list.add(LedgerPosting(journalEntry.date, line.description, line.debit, line.credit))
             accounts[line.accountId]?.balance += (line.debit - line.credit)
         }
+
+        println("Journal on ${journalEntry.date} successfully posted (Balanced).")
     }
 
     // Print a detailed ledger per account

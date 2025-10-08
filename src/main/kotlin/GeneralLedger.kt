@@ -20,14 +20,20 @@ class GeneralLedger(private val accounts: Map<String, Account>) {
             throw IllegalArgumentException("Journal on ${journalEntry.date} is unbalanced! Please fix it before posting.")
         }
 
-        // If balanced, continue posting to ledger
+        // Validate accounts
+        val invalidAccounts = journalEntry.lines.map { it.accountId }.filter { !accounts.containsKey(it) }
+        if (invalidAccounts.isNotEmpty()) {
+            throw IllegalArgumentException("Journal on ${journalEntry.date} contains INVALID account id : ${invalidAccounts.joinToString(", ")}")
+        }
+
+        // Passed validations, continue posting to ledger
         for (line in journalEntry.lines) {
             val list  = postings[line.accountId] ?: throw IllegalArgumentException("Account ${line.accountId} not found")
             list.add(LedgerPosting(journalEntry.date, line.description, line.debit, line.credit))
             accounts[line.accountId]?.balance += (line.debit - line.credit)
         }
 
-        println("Journal on ${journalEntry.date} successfully posted (Balanced).")
+        println("Journal on ${journalEntry.date} successfully posted.")
     }
 
     // Print a detailed ledger per account

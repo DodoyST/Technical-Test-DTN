@@ -50,3 +50,43 @@ Below is an example of the input file structure used by the program.
     }
   ]
 }
+```
+
+---
+
+## 📊 Result (Program Output)
+
+The following is an example of the program result code.
+
+```bash
+Journal on 2025-06-15 successfully posted.
+Journal on 2025-07-14 successfully posted.
+---------- LEDGER ----------
+Account: 101 - Member Receivables
+Date            | Description                    | Debit           | Credit         
+--------------------------------------------------------------------------------
+2025-06-15      | Loan Disbursement - Member Rec | Rp30.000.000,00 | Rp0,00         
+2025-07-14      | Installment Payment - Principa | Rp0,00          | Rp6.000.000,00 
+--------------------------------------------------------------------------------
+Current Balance: Rp24.000.000,00 (Debit)
+
+Account: 102 - Cash
+Date            | Description                    | Debit           | Credit         
+--------------------------------------------------------------------------------
+2025-06-15      | Loan Disbursement - Cash       | Rp0,00          | Rp30.000.000,00
+2025-07-14      | Installment Payment - Cash     | Rp6.750.000,00  | Rp0,00         
+--------------------------------------------------------------------------------
+Current Balance: Rp23.250.000,00 (Credit)
+
+Account: 201 - Member Loan Interest Income
+Date            | Description                    | Debit           | Credit         
+--------------------------------------------------------------------------------
+2025-07-14      | Installment Payment - Interest | Rp0,00          | Rp750.000,00   
+--------------------------------------------------------------------------------
+Current Balance: Rp750.000,00 (Credit)
+
+---------- BALANCE SUMMARY ----------
+101 - Member Receivables: Rp24.000.000,00 (Debit)
+102 - Cash: Rp23.250.000,00 (Credit)
+201 - Member Loan Interest Income: Rp750.000,00 (Credit)
+```
